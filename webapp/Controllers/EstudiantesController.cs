@@ -50,9 +50,23 @@ namespace webapp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Estudiante.Add(estudiante);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Estudiante.Add(estudiante);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    // ... bloque de logica de negocio para determinar el error exacto para pasar por msj
+
+                    ModelState.AddModelError("Identificacion","El estudiante ya está registrado.");
+
+                    ModelState.AddModelError(string.Empty, "Hay un problema para guardar el registro");
+
+
+                }
+                
             }
 
             return View(estudiante);
@@ -65,11 +79,19 @@ namespace webapp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            
             Estudiante estudiante = db.Estudiante.Find(id);
             if (estudiante == null)
             {
                 return HttpNotFound();
             }
+
+            List<webapp.Models.TipoIdentificacionDTO> lista = new List<webapp.Models.TipoIdentificacionDTO>();
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "CED", Nombre = "Cédula" });
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "RUC", Nombre = "Ruc" });
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "PAS", Nombre = "Pasporte" });
+            ViewBag.lista = new SelectList(lista, "Codigo", "Nombre", estudiante.TipoIdentificacion);
             return View(estudiante);
         }
 

@@ -17,10 +17,12 @@ namespace webapp.Models
 
         [Key]
         [StringLength(13)]
+        [Display(Name = "Identificación")]
         public string Identificacion { get; set; }
 
         [Required]
         [StringLength(5)]
+        [Display(Name = "Tipo Identificación")]
         public string TipoIdentificacion { get; set; }
 
         [Required]
@@ -32,6 +34,7 @@ namespace webapp.Models
         public string Apellidos { get; set; }
 
         [Column(TypeName = "date")]
+        [Display(Name = "Fecha Nacimiento")]
         public DateTime? FechaNacimiento { get; set; }
 
         public bool Activo { get; set; }

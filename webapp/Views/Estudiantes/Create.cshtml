@@ -2,6 +2,10 @@
 
 @{
     ViewBag.Title = "Create";
+    List<webapp.Models.TipoIdentificacionDTO> lista = new List<webapp.Models.TipoIdentificacionDTO>();
+    lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "CED", Nombre = "Cédula" });
+    lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "RUC", Nombre = "Ruc" });
+    lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "PAS", Nombre = "Pasporte" });
 }
 
 <h2>Create</h2>
@@ -26,7 +30,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TipoIdentificacion, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TipoIdentificacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.TipoIdentificacion, new SelectList(lista, "Codigo","Nombre"), 
+                  new{@class = "form-control" })
                 @Html.ValidationMessageFor(model => model.TipoIdentificacion, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -50,7 +55,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.FechaNacimiento, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FechaNacimiento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.FechaNacimiento)
                 @Html.ValidationMessageFor(model => model.FechaNacimiento, "", new { @class = "text-danger" })
             </div>
         </div>

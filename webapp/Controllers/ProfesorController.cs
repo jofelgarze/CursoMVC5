@@ -20,6 +20,12 @@ namespace webapp.Controllers
             return View(db.Profesor.ToList());
         }
 
+        // GET: Profesor
+        public ActionResult GetProfesores()
+        {
+            return Json(new { data = db.Profesor.ToList() }, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Profesor/Details/5
         public ActionResult Details(int? id)
         {

@@ -25,7 +25,12 @@ namespace webapp
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/DataTables/css/jquery.dataTables.min.css",
                       "~/Content/site.css"));
+
+            //Jquery Datatable
+            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
+                        "~/Scripts/DataTables/jquery.dataTables.min.js"));
         }
     }
 }

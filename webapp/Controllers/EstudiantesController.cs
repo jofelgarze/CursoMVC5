@@ -21,6 +21,21 @@ namespace webapp.Controllers
         }
 
         // GET: Estudiantes/Details/5
+        public ActionResult DetailsAjax(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Estudiante estudiante = db.Estudiante.Find(id);
+            if (estudiante == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView(estudiante);
+        }
+
+        // GET: Estudiantes/Details/5
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -92,7 +107,32 @@ namespace webapp.Controllers
             lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "RUC", Nombre = "Ruc" });
             lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "PAS", Nombre = "Pasporte" });
             ViewBag.lista = new SelectList(lista, "Codigo", "Nombre", estudiante.TipoIdentificacion);
+         
             return View(estudiante);
+        }
+
+        // GET: Estudiantes/Edit/5
+        public ActionResult EditAjax(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+
+            Estudiante estudiante = db.Estudiante.Find(id);
+            if (estudiante == null)
+            {
+                return HttpNotFound();
+            }
+
+            List<webapp.Models.TipoIdentificacionDTO> lista = new List<webapp.Models.TipoIdentificacionDTO>();
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "CED", Nombre = "Cédula" });
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "RUC", Nombre = "Ruc" });
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "PAS", Nombre = "Pasporte" });
+            ViewBag.lista = new SelectList(lista, "Codigo", "Nombre", estudiante.TipoIdentificacion);
+
+            return PartialView(estudiante);
         }
 
         // POST: Estudiantes/Edit/5
@@ -111,6 +151,29 @@ namespace webapp.Controllers
             return View(estudiante);
         }
 
+        // POST: Estudiantes/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAjax([Bind(Include = "Identificacion,TipoIdentificacion,Nombres,Apellidos,FechaNacimiento,Activo")] Estudiante estudiante)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(estudiante).State = EntityState.Modified;
+                db.SaveChanges();
+
+                var result = new JavaScriptResult();
+                result.Script = "window.location='/Estudiantes/Index'";
+                return result;
+            }
+
+            List<webapp.Models.TipoIdentificacionDTO> lista = new List<webapp.Models.TipoIdentificacionDTO>();
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "CED", Nombre = "Cédula" });
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "RUC", Nombre = "Ruc" });
+            lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "PAS", Nombre = "Pasporte" });
+            ViewBag.lista = new SelectList(lista, "Codigo", "Nombre", estudiante.TipoIdentificacion);
+            return PartialView(estudiante);
+        }
+
         // GET: Estudiantes/Delete/5
         public ActionResult Delete(string id)
         {
@@ -123,7 +186,7 @@ namespace webapp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(estudiante);
+            return PartialView(estudiante);
         }
 
         // POST: Estudiantes/Delete/5

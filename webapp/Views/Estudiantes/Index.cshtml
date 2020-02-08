@@ -32,29 +32,72 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TipoIdentificacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombres)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Apellidos)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaNacimiento)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Activo)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Identificacion }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Identificacion }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Identificacion })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoIdentificacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombres)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellidos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaNacimiento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activo)
+            </td>
+            <td>
+                @Ajax.ActionLink("Edit", "EditAjax", new { id = item.Identificacion }, new AjaxOptions
+                {
+                       HttpMethod = "GET",
+                       InsertionMode = InsertionMode.Replace,
+                       UpdateTargetId = "detalle-cliente",
+                       AllowCache = false
+                   }, new { data_toggle = "modal", @data_target = "#detalle-modal" }) |
+                @Ajax.ActionLink("Details", "DetailsAjax", new { id = item.Identificacion }, new AjaxOptions
+                {
+                       HttpMethod = "GET",
+                       InsertionMode = InsertionMode.Replace,
+                       UpdateTargetId = "detalle-cliente",
+                       AllowCache = false
+                   }, new { data_toggle = "modal", @data_target = "#detalle-modal" }) |
+                @Ajax.ActionLink("Delete", "Delete", new { id = item.Identificacion }, new AjaxOptions
+                {
+                       HttpMethod = "GET",
+                       InsertionMode = InsertionMode.Replace,
+                       UpdateTargetId = "confirmar",
+                       AllowCache = false
+                   }, new { data_toggle = "modal", @data_target = "#confirmar-accion" })
+            </td>
+        </tr>
+    }
 
 </table>
+
+
+<!-- Modal -->
+<div class="modal fade" id="detalle-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="detalle-cliente">
+
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="confirmar-accion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="confirmar">
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

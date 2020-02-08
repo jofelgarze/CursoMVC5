@@ -474,6 +474,8 @@
     <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
     <Content Include="Views\Estudiantes\DetailsAjax.cshtml" />
     <Content Include="Views\Estudiantes\EditAjax.cshtml" />
+    <Content Include="Views\Profesor\DetailsAjax.cshtml" />
+    <Content Include="Views\Profesor\EditAjax.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

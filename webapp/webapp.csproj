@@ -476,6 +476,7 @@
     <Content Include="Views\Estudiantes\EditAjax.cshtml" />
     <Content Include="Views\Profesor\DetailsAjax.cshtml" />
     <Content Include="Views\Profesor\EditAjax.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\TipoIdentificacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

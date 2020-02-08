@@ -21,6 +21,7 @@ namespace webapp.Models
         public string Identificacion { get; set; }
 
         [Required]
+        [UIHint("TipoIdentificacion")]
         [StringLength(5)]
         [Display(Name = "Tipo Identificación")]
         public string TipoIdentificacion { get; set; }

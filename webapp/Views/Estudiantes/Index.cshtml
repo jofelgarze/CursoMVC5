@@ -12,49 +12,102 @@
         Matricula
     </a>
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoIdentificacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombres)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Apellidos)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaNacimiento)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Activo)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TipoIdentificacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombres)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Apellidos)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaNacimiento)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Activo)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Identificacion }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Identificacion }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Identificacion })
-        </td>
-    </tr>
-}
+<table class="table table-striped table-responsive" id="estudiantes-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoIdentificacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombres)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaNacimiento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Activo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoIdentificacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellidos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaNacimiento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Activo)
+                </td>
+                <td>
+                    @Ajax.ActionLink("Edit", "EditAjax", new { id = item.Identificacion }, new AjaxOptions
+                    {
+                           HttpMethod = "GET",
+                           InsertionMode = InsertionMode.Replace,
+                           UpdateTargetId = "detalle-cliente",
+                           AllowCache = false
+                       }, new { data_toggle = "modal", @data_target = "#detalle-modal" }) |
+                    @Ajax.ActionLink("Details", "DetailsAjax", new { id = item.Identificacion }, new AjaxOptions
+                    {
+                           HttpMethod = "GET",
+                           InsertionMode = InsertionMode.Replace,
+                           UpdateTargetId = "detalle-cliente",
+                           AllowCache = false
+                       }, new { data_toggle = "modal", @data_target = "#detalle-modal" }) |
+                    @Ajax.ActionLink("Delete", "Delete", new { id = item.Identificacion }, new AjaxOptions
+                    {
+                           HttpMethod = "GET",
+                           InsertionMode = InsertionMode.Replace,
+                           UpdateTargetId = "confirmar",
+                           AllowCache = false
+                       }, new { data_toggle = "modal", @data_target = "#confirmar-accion" })
+                </td>
+            </tr>
+        }
+    </tbody>   
 
 </table>
+
+
+<!-- Modal -->
+<div class="modal fade" id="detalle-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="detalle-cliente">
+
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="confirmar-accion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="confirmar">
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatables")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#estudiantes-table').DataTable();
+        });
+    </script>
+}

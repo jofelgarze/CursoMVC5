@@ -1,0 +1,15 @@
+﻿@model string
+@{ 
+    List<webapp.Models.TipoIdentificacionDTO> lista = new List<webapp.Models.TipoIdentificacionDTO>();
+    lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "CED", Nombre = "Cédula" });
+    lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "RUC", Nombre = "Ruc" });
+    lista.Add(new webapp.Models.TipoIdentificacionDTO { Codigo = "PAS", Nombre = "Pasporte" });
+
+}
+@if (lista.Exists(t => t.Codigo.Equals(Model)))
+{
+    @lista.Where(t => t.Codigo.Equals(Model)).Single().Nombre;
+}
+else { 
+    @Model
+}

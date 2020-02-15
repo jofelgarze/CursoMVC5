@@ -9,31 +9,82 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombres)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Apellidos)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombres)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Apellidos)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
+<table class="table table-striped table-responsive" id="profesores-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombres)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="detalle-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="detalle-cliente">
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatables")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#profesores-table').DataTable({
+                "ajax": "@Url.Action("GetProfesores","Profesor")",
+                "columns": [
+                    { "data": "Id" },
+                    { "data": "Nombres" },
+                    { "data": "Apellidos" }
+                ],
+                "columnDefs": [
+                    {
+                        // The `data` parameter refers to the data for the cell (defined by the
+                        // `data` option, which defaults to the column being worked with, in
+                        // this case `data: 0`.
+                        "render": function (data, type, row) {
+                            var link = '@Ajax.ActionLink("Details", "DetailsAjax",
+                                        new { id = -1 },
+                                        new AjaxOptions
+                                        {
+                                            HttpMethod = "GET",
+                                            InsertionMode = InsertionMode.Replace,
+                                            UpdateTargetId = "detalle-cliente",
+                                            AllowCache = false
+                                        },
+                                        new { data_toggle = "modal", @data_target = "#detalle-modal" })';
+                            link = link.replace('-1', row.Id);
+                            var link2 = '@Ajax.ActionLink("Edit", "EditAjax",
+                                        new { id = -1 },
+                                        new AjaxOptions
+                                        {
+                                            HttpMethod = "GET",
+                                            InsertionMode = InsertionMode.Replace,
+                                            UpdateTargetId = "detalle-cliente",
+                                            AllowCache = false
+                                        },
+                                        new { data_toggle = "modal", @data_target = "#detalle-modal" })';
+                            link2 = link2.replace('-1', row.Id);
+                            var link3 = '@Html.ActionLink("Delete", "Delete", new { id = -1 })';
+                            link3 = link3.replace('-1', row.Id);
+                            return link + ' | ' + link2 + ' | ' + link3;
+                        },
+                        "targets": 3
+                    },
+                    { "visible": false,  "targets": [ 0 ] }
+                ]
+            });
+        });
+    </script>
+}

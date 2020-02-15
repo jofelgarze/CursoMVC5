@@ -20,6 +20,12 @@ namespace webapp.Controllers
             return View(db.Profesor.ToList());
         }
 
+        // GET: Profesor
+        public ActionResult GetProfesores()
+        {
+            return Json(new { data = db.Profesor.ToList() }, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Profesor/Details/5
         public ActionResult Details(int? id)
         {
@@ -33,6 +39,21 @@ namespace webapp.Controllers
                 return HttpNotFound();
             }
             return View(profesor);
+        }
+
+        // GET: Profesor/Details/5
+        public ActionResult DetailsAjax(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Profesor profesor = db.Profesor.Find(id);
+            if (profesor == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView(profesor);
         }
 
         // GET: Profesor/Create
@@ -73,6 +94,21 @@ namespace webapp.Controllers
             return View(profesor);
         }
 
+        // GET: Profesor/Edit/5
+        public ActionResult EditAjax(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Profesor profesor = db.Profesor.Find(id);
+            if (profesor == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView(profesor);
+        }
+
         // POST: Profesor/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -85,6 +121,24 @@ namespace webapp.Controllers
                 db.Entry(profesor).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
+            }
+            return View(profesor);
+        }
+
+        // POST: Profesor/Edit/5
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
+        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAjax([Bind(Include = "Id,Nombres,Apellidos")] Profesor profesor)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(profesor).State = EntityState.Modified;
+                db.SaveChanges();
+                var result = new JavaScriptResult();
+                result.Script = "window.location='" + Url.Action("Index") + "';";
+                return result;
             }
             return View(profesor);
         }
